@@ -3949,3 +3949,8 @@ enum fsync_type
     unsigned int shm_idx;
 @REPLY
 @END
+
+@REQ(speedhack_set_speed)
+    unsigned int multiplier;
+@REPLY
+@END

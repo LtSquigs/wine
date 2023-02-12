@@ -1657,3 +1657,6 @@
 # Filesystem
 @ stdcall -syscall wine_nt_to_unix_file_name(ptr ptr ptr long)
 @ stdcall -syscall wine_unix_to_nt_file_name(str ptr ptr)
+
+# Speedhacks
+@ stdcall -syscall wine_update_speedhack_multiplier(long)
