@@ -989,3 +989,13 @@ NTSTATUS WINAPI wow64_wine_unix_to_nt_file_name( UINT *args )
 
     return wine_unix_to_nt_file_name( name, buffer, size );
 }
+
+/**********************************************************************
+ *           wow64_wine_update_speedhack_multiplier
+ */
+NTSTATUS WINAPI wow64_wine_update_speedhack_multiplier( UINT *args  )
+{
+    unsigned long multiplier = get_ulong(&args);
+    
+    return wine_update_speedhack_multiplier( multiplier );
+}

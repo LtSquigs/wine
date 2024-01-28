@@ -366,6 +366,7 @@ static void * const syscalls[] =
     wine_server_fd_to_handle,
     wine_server_handle_to_fd,
     wine_unix_to_nt_file_name,
+    wine_update_speedhack_multiplier,
 };
 
 static BYTE syscall_args[ARRAY_SIZE(syscalls)];

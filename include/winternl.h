@@ -4698,6 +4698,7 @@ NTSYSAPI void      WINAPI TpWaitForWork(TP_WORK *,BOOL);
 NTSYSAPI NTSTATUS WINAPI wine_nt_to_unix_file_name( const OBJECT_ATTRIBUTES *attr, char *nameA, ULONG *size,
                                                     UINT disposition );
 NTSYSAPI NTSTATUS WINAPI wine_unix_to_nt_file_name( const char *name, WCHAR *buffer, ULONG *size );
+NTSYSAPI NTSTATUS WINAPI wine_update_speedhack_multiplier( ULONG multiplier );
 
 
 /***********************************************************************

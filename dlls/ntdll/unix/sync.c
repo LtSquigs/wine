@@ -80,27 +80,16 @@ static const char *debugstr_timeout( const LARGE_INTEGER *timeout )
 /* return a monotonic time counter, in Win32 ticks */
 static inline ULONGLONG monotonic_counter(void)
 {
-    struct timeval now;
-#ifdef __APPLE__
-    static mach_timebase_info_data_t timebase;
+    ULONG high, low;
 
-    if (!timebase.denom) mach_timebase_info( &timebase );
-#ifdef HAVE_MACH_CONTINUOUS_TIME
-    if (&mach_continuous_time != NULL)
-        return mach_continuous_time() * timebase.numer / timebase.denom / 100;
-#endif
-    return mach_absolute_time() * timebase.numer / timebase.denom / 100;
-#elif defined(HAVE_CLOCK_GETTIME)
-    struct timespec ts;
-#ifdef CLOCK_MONOTONIC_RAW
-    if (!clock_gettime( CLOCK_MONOTONIC_RAW, &ts ))
-        return ts.tv_sec * (ULONGLONG)TICKSPERSEC + ts.tv_nsec / 100;
-#endif
-    if (!clock_gettime( CLOCK_MONOTONIC, &ts ))
-        return ts.tv_sec * (ULONGLONG)TICKSPERSEC + ts.tv_nsec / 100;
-#endif
-    gettimeofday( &now, 0 );
-    return ticks_from_time_t( now.tv_sec ) + now.tv_usec * 10 - server_start_time;
+    do
+    {
+        high = user_shared_data->InterruptTime.High1Time;
+        low = user_shared_data->InterruptTime.LowPart;
+    }
+    while (high != user_shared_data->InterruptTime.High2Time);
+
+    return (ULONGLONG)high << 32 | low;
 }
 
 
@@ -1637,6 +1626,21 @@ NTSTATUS WINAPI NtDelayExecution( BOOLEAN alertable, const LARGE_INTEGER *timeou
             if (select( 0, NULL, NULL, NULL, &tv ) != -1) break;
         }
     }
+    return STATUS_SUCCESS;
+}
+
+/******************************************************************
+ *           wine_update_speedhack_multiplier
+ */
+NTSTATUS WINAPI wine_update_speedhack_multiplier( ULONG multiplier )
+{
+    SERVER_START_REQ( speedhack_set_speed )
+    {
+        req->multiplier  = multiplier;
+        wine_server_call( req );
+    }
+    SERVER_END_REQ;
+
     return STATUS_SUCCESS;
 }
 

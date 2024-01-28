@@ -3127,3 +3127,8 @@ DECL_HANDLER(set_fd_eof_info)
         release_object( fd );
     }
 }
+
+DECL_HANDLER(speedhack_set_speed)
+{
+    set_speedhack_multiplier(req->multiplier);
+}

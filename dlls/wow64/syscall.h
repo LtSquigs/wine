@@ -260,6 +260,7 @@
     SYSCALL_ENTRY( wine_server_call ) \
     SYSCALL_ENTRY( wine_server_fd_to_handle ) \
     SYSCALL_ENTRY( wine_server_handle_to_fd ) \
-    SYSCALL_ENTRY( wine_unix_to_nt_file_name )
+    SYSCALL_ENTRY( wine_unix_to_nt_file_name ) \
+    SYSCALL_ENTRY( wine_update_speedhack_multiplier )
 
 #endif /* __WOW64_SYSCALL_H */
